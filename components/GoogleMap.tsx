@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { Loader } from '@googlemaps/js-api-loader';
+import { useEffect, useRef, useState } from "react";
+import { Loader } from "@googlemaps/js-api-loader";
 
 interface GoogleMapProps {
   onLocationSelect?: (location: { lat: number; lng: number; address: string }) => void;
@@ -19,52 +19,47 @@ interface GoogleMapProps {
 export default function GoogleMap({
   onLocationSelect,
   properties = [],
-  center = { lat: 6.5244, lng: 3.3792 }, // Lagos, Nigeria
+  center = { lat: 6.5244, lng: 3.3792 },
   zoom = 10,
-  height = '400px'
+  height = "400px",
 }: GoogleMapProps) {
   const mapRef = useRef<HTMLDivElement>(null);
-  const [map, setMap] = useState<google.maps.Map | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const initializeMap = async () => {
       const loader = new Loader({
         apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY as string,
-        version: 'weekly',
-        libraries: ['places'],
+        version: "weekly",
+        libraries: ["places"],
       });
 
-      const { Map } = await loader.importLibrary('maps');
-      const { Marker } = await loader.importLibrary('marker') as google.maps.MarkerLibrary;
+      // Cast to any because TS types don’t know importLibrary yet
+      const { Map } = (await (loader as any).importLibrary("maps")) as google.maps.MapsLibrary;
+      const { Marker } = (await (loader as any).importLibrary("marker")) as google.maps.MarkerLibrary;
 
       if (mapRef.current) {
-        const mapInstance = new Map(mapRef.current, {
+        const map = new Map(mapRef.current, {
           center,
           zoom,
-          mapTypeControl: true,
-          streetViewControl: true,
-          fullscreenControl: true,
         });
 
-        setMap(mapInstance);
         setIsLoaded(true);
 
-        // Add click listener for location selection
+        // Location selection
         if (onLocationSelect) {
-          mapInstance.addListener('click', async (event: google.maps.MapMouseEvent) => {
+          map.addListener("click", async (event: google.maps.MapMouseEvent) => {
             if (event.latLng) {
               const lat = event.latLng.lat();
               const lng = event.latLng.lng();
-              
-              // Get address using reverse geocoding
+
               const geocoder = new google.maps.Geocoder();
               try {
                 const result = await geocoder.geocode({ location: { lat, lng } });
-                const address = result.results[0]?.formatted_address || `${lat}, ${lng}`;
-                
+                const address =
+                  result.results[0]?.formatted_address || `${lat}, ${lng}`;
                 onLocationSelect({ lat, lng, address });
-              } catch (error) {
+              } catch {
                 onLocationSelect({ lat, lng, address: `${lat}, ${lng}` });
               }
             }
@@ -75,7 +70,7 @@ export default function GoogleMap({
         properties.forEach((property) => {
           const marker = new Marker({
             position: property.coordinates,
-            map: mapInstance,
+            map,
             title: property.title,
           });
 
@@ -88,8 +83,8 @@ export default function GoogleMap({
             `,
           });
 
-          marker.addListener('click', () => {
-            infoWindow.open(mapInstance, marker);
+          marker.addListener("click", () => {
+            infoWindow.open(map, marker);
           });
         });
       }
@@ -100,7 +95,11 @@ export default function GoogleMap({
 
   return (
     <div className="w-full">
-      <div ref={mapRef} style={{ width: '100%', height }} className="rounded-lg" />
+      <div
+        ref={mapRef}
+        style={{ width: "100%", height }}
+        className="rounded-lg"
+      />
       {!isLoaded && (
         <div className="flex items-center justify-center" style={{ height }}>
           <div className="text-center">
