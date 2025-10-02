@@ -1,9 +1,42 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-const renovationSchema = new mongoose.Schema({
+export interface IRenovation {
+  type: string;
+  description?: string;
+  cost: number;
+  date: Date;
+  documents: string[];
+}
+
+export interface IPopularPlace {
+  name: string;
+  type: string;
+  distance: string;
+}
+
+export interface IProperty extends Document {
+  landlordId: mongoose.Types.ObjectId;
+  title: string;
+  description?: string;
+  address: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  landDocuments: string[];
+  propertyImages: string[];
+  popularPlaces: IPopularPlace[];
+  renovations: IRenovation[];
+  totalRenovationCost: number;
+  purchasePrice?: number;
+  estimatedValue?: number;
+  createdAt: Date;
+}
+
+const renovationSchema = new Schema<IRenovation>({
   type: {
     type: String,
-    required: true, // e.g., 'fencing', 'repainting', 'roofing'
+    required: true,
   },
   description: String,
   cost: {
@@ -14,12 +47,18 @@ const renovationSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  documents: [String], // UploadThing URLs
+  documents: [String],
 });
 
-const propertySchema = new mongoose.Schema({
+const popularPlaceSchema = new Schema<IPopularPlace>({
+  name: String,
+  type: String,
+  distance: String,
+});
+
+const propertySchema = new Schema<IProperty>({
   landlordId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
@@ -42,13 +81,9 @@ const propertySchema = new mongoose.Schema({
       required: true,
     },
   },
-  landDocuments: [String], // UploadThing URLs
-  propertyImages: [String], // UploadThing URLs
-  popularPlaces: [{
-    name: String,
-    type: String, // 'filling_station', 'school', 'hospital', etc.
-    distance: String, // e.g., '500m', '1.2km'
-  }],
+  landDocuments: [String],
+  propertyImages: [String],
+  popularPlaces: [popularPlaceSchema],
   renovations: [renovationSchema],
   totalRenovationCost: {
     type: Number,
@@ -72,4 +107,6 @@ propertySchema.pre('save', function(next) {
   next();
 });
 
-export default mongoose.models.Property || mongoose.model('Property', propertySchema);
+const Property = mongoose.models.Property || mongoose.model<IProperty>('Property', propertySchema);
+
+export default Property;

@@ -1,13 +1,31 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-const tenantSchema = new mongoose.Schema({
+export interface ITenant extends Document {
+  landlordId: mongoose.Types.ObjectId;
+  propertyId: mongoose.Types.ObjectId;
+  name: string;
+  email: string;
+  phone: string;
+  rentAmount: number;
+  rentStart: Date;
+  rentEnd: Date;
+  rentDuration: string;
+  lastPaymentDate?: Date;
+  nextPaymentDate?: Date;
+  isActive: boolean;
+  documents: string[];
+  notes?: string;
+  createdAt: Date;
+}
+
+const tenantSchema = new Schema<ITenant>({
   landlordId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
   propertyId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Property',
     required: true,
   },
@@ -37,7 +55,7 @@ const tenantSchema = new mongoose.Schema({
   },
   rentDuration: {
     type: String,
-    required: true, // e.g., '12 months', '2 years'
+    required: true,
   },
   lastPaymentDate: Date,
   nextPaymentDate: Date,
@@ -45,7 +63,7 @@ const tenantSchema = new mongoose.Schema({
     type: Boolean,
     default: true,
   },
-  documents: [String], // UploadThing URLs (lease agreement, etc.)
+  documents: [String],
   notes: String,
   createdAt: {
     type: Date,
@@ -63,4 +81,6 @@ tenantSchema.pre('save', function(next) {
   next();
 });
 
-export default mongoose.models.Tenant || mongoose.model('Tenant', tenantSchema);
+const Tenant = mongoose.models.Tenant || mongoose.model<ITenant>('Tenant', tenantSchema);
+
+export default Tenant;

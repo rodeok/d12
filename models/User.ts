@@ -1,6 +1,16 @@
-import mongoose from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
-const userSchema = new mongoose.Schema({
+export interface IUser extends Document {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+  isActive: boolean;
+  isBanned: boolean;
+  createdAt: Date;
+}
+
+const userSchema = new Schema<IUser>({
   name: {
     type: String,
     required: true,
@@ -32,4 +42,9 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.models.User || mongoose.model('User', userSchema);
+// Add index for better performance
+userSchema.index({ email: 1 });
+
+const User = mongoose.models.User || mongoose.model<IUser>('User', userSchema);
+
+export default User;
