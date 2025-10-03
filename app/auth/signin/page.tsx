@@ -97,9 +97,7 @@ export default function SignIn() {
               </Link>
             </p>
             <p className="text-sm text-gray-600 mt-2">
-              <Link href="/admin/login" className="text-green-600 hover:underline">
-                Admin Login
-              </Link>
+         
             </p>
           </div>
         </CardContent>

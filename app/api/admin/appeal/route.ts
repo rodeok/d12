@@ -101,12 +101,12 @@ export async function POST(req: NextRequest) {
     `;
 
     // Send email to admin
-    const adminEmail = process.env.ADMIN_EMAIL || 'admin@propertymanager.com';
+    const adminEmail = process.env.ADMIN_EMAIL || 'nationx22@gmail.com';
     
     if (process.env.RESEND_API_KEY) {
       try {
         await resend.emails.send({
-          from: 'PropertyManager Appeals <appeals@propertymanager.com>',
+          from: 'PropertyManager Appeals  <appeals@propertymanager.com>',
           to: [adminEmail],
           subject: `🚨 Account ${accountStatus === 'banned' ? 'Unban' : 'Recovery'} Appeal - ${name}`,
           html: adminEmailHtml,
@@ -114,7 +114,7 @@ export async function POST(req: NextRequest) {
 
         // Send confirmation email to user
         await resend.emails.send({
-          from: 'PropertyManager Support <support@propertymanager.com>',
+          from: 'PropertyManager Support <nationx22@gmail.com>',
           to: [email],
           subject: `Appeal Submitted - Account ${accountStatus === 'banned' ? 'Unban' : 'Recovery'} Request`,
           html: userEmailHtml,
