@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Building, Users, Calendar, TrendingUp, MapPin, AlertTriangle } from 'lucide-react';
+import { Building, Users, Calendar, TrendingUp, MapPin, TriangleAlert as AlertTriangle } from 'lucide-react';
 import Link from 'next/link';
 
 interface DashboardStats {
@@ -91,103 +91,103 @@ export default function Dashboard() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Welcome back, {session?.user?.name}</h1>
-        <p className="text-gray-600">Here's your property management overview</p>
+        <h1 className="font-cormorant font-bold text-4xl text-dark-primary">Welcome back, {session?.user?.name}</h1>
+        <p className="font-satoshi text-gray-medium">Here's your property management overview</p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
+        <Card className="card-elegant">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Properties</CardTitle>
-            <Building className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="ui-label">Total Properties</CardTitle>
+            <Building className="h-4 w-4 text-blue-primary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.totalProperties}</div>
-            <p className="text-xs text-muted-foreground">Properties under management</p>
+            <div className="text-3xl font-cormorant font-bold text-dark-primary">{stats.totalProperties}</div>
+            <p className="caption">Properties under management</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="card-elegant">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Tenants</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="ui-label">Active Tenants</CardTitle>
+            <Users className="h-4 w-4 text-blue-secondary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{stats.activeTenants}</div>
-            <p className="text-xs text-muted-foreground">
+            <div className="text-3xl font-cormorant font-bold text-dark-primary">{stats.activeTenants}</div>
+            <p className="caption">
               {stats.totalTenants} total tenants
             </p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="card-elegant">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Monthly Income</CardTitle>
-            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="ui-label">Monthly Income</CardTitle>
+            <TrendingUp className="h-4 w-4 text-blue-tertiary" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">₦{stats.totalRentIncome.toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground">From active tenants</p>
+            <div className="text-3xl font-cormorant font-bold text-dark-primary">₦{stats.totalRentIncome.toLocaleString()}</div>
+            <p className="caption">From active tenants</p>
           </CardContent>
         </Card>
 
-        <Card className="border-yellow-200 bg-yellow-50">
+        <Card className="border-yellow-300 bg-yellow-50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-yellow-800">Expiring Soon</CardTitle>
+            <CardTitle className="ui-label text-yellow-800">Expiring Soon</CardTitle>
             <Calendar className="h-4 w-4 text-yellow-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-900">{stats.expiringSoon}</div>
-            <p className="text-xs text-yellow-700">Rents expire within 30 days</p>
+            <div className="text-3xl font-cormorant font-bold text-yellow-900">{stats.expiringSoon}</div>
+            <p className="caption text-yellow-700">Rents expire within 30 days</p>
           </CardContent>
         </Card>
 
-        <Card className="border-red-200 bg-red-50">
+        <Card className="border-red-300 bg-red-50">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium text-red-800">Expired Rents</CardTitle>
+            <CardTitle className="ui-label text-red-800">Expired Rents</CardTitle>
             <AlertTriangle className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-900">{stats.expiredRents}</div>
-            <p className="text-xs text-red-700">Require immediate attention</p>
+            <div className="text-3xl font-cormorant font-bold text-red-900">{stats.expiredRents}</div>
+            <p className="caption text-red-700">Require immediate attention</p>
           </CardContent>
         </Card>
       </div>
 
       {/* Quick Actions */}
-      <Card>
+      <Card className="card-elegant">
         <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-          <CardDescription>Manage your properties and tenants</CardDescription>
+          <CardTitle className="font-cormorant font-semibold text-2xl text-dark-primary">Quick Actions</CardTitle>
+          <CardDescription className="font-satoshi text-gray-medium">Manage your properties and tenants</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             <Link href="/dashboard/properties/new">
-              <Button className="w-full h-16 flex flex-col items-center justify-center space-y-2">
+              <Button className="btn-primary w-full h-16 flex flex-col items-center justify-center space-y-2">
                 <Building className="h-5 w-5" />
-                <span>Add Property</span>
+                <span className="font-satoshi font-medium">Add Property</span>
               </Button>
             </Link>
             
             <Link href="/dashboard/tenants/new">
-              <Button variant="outline" className="w-full h-16 flex flex-col items-center justify-center space-y-2">
+              <Button className="btn-secondary w-full h-16 flex flex-col items-center justify-center space-y-2">
                 <Users className="h-5 w-5" />
-                <span>Add Tenant</span>
+                <span className="font-satoshi font-medium">Add Tenant</span>
               </Button>
             </Link>
             
             <Link href="/dashboard/calendar">
-              <Button variant="outline" className="w-full h-16 flex flex-col items-center justify-center space-y-2">
+              <Button className="btn-secondary w-full h-16 flex flex-col items-center justify-center space-y-2">
                 <Calendar className="h-5 w-5" />
-                <span>View Calendar</span>
+                <span className="font-satoshi font-medium">View Calendar</span>
               </Button>
             </Link>
             
             <Link href="/dashboard/map">
-              <Button variant="outline" className="w-full h-16 flex flex-col items-center justify-center space-y-2">
+              <Button className="btn-secondary w-full h-16 flex flex-col items-center justify-center space-y-2">
                 <MapPin className="h-5 w-5" />
-                <span>Property Map</span>
+                <span className="font-satoshi font-medium">Property Map</span>
               </Button>
             </Link>
           </div>

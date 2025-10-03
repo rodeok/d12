@@ -4,17 +4,7 @@ import { useState } from 'react';
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { 
-  Home, 
-  Building, 
-  Users, 
-  Calendar, 
-  MapPin, 
-  LogOut, 
-  Menu, 
-  X,
-  User
-} from 'lucide-react';
+import { Chrome as Home, Building, Users, Calendar, MapPin, LogOut, Menu, X, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const navigation = [
@@ -52,30 +42,32 @@ export default function DashboardNav() {
         <div className="flex h-full flex-col">
           {/* Logo/Brand */}
           <div className="flex h-16 items-center justify-center border-b border-gray-200">
-            <h1 className="text-xl font-bold text-gray-900">Property Manager</h1>
+            <h1 className="text-xl font-cormorant font-bold text-dark-primary">Property Manager</h1>
           </div>
 
           {/* Navigation */}
           <nav className="flex-1 space-y-1 px-2 py-4">
             {navigation.map((item) => {
-              const isActive = pathname === item.href || (pathname?.startsWith(item.href + '/'));
+              const isActive =
+                pathname === item.href ||
+                (pathname && pathname.startsWith(item.href + '/'));
               return (
                 <Link
                   key={item.name}
                   href={item.href}
                   className={`group flex items-center px-2 py-2 text-sm font-medium rounded-md transition-colors ${
                     isActive
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                      ? 'bg-blue-primary/10 text-blue-primary'
+                      : 'text-gray-medium hover:bg-light-primary hover:text-dark-primary'
                   }`}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <item.icon
                     className={`mr-3 h-5 w-5 ${
-                      isActive ? 'text-blue-500' : 'text-gray-400 group-hover:text-gray-500'
+                      isActive ? 'text-blue-primary' : 'text-gray-medium group-hover:text-dark-secondary'
                     }`}
                   />
-                  {item.name}
+                  <span className="font-satoshi font-medium">{item.name}</span>
                 </Link>
               );
             })}
@@ -85,16 +77,16 @@ export default function DashboardNav() {
           <div className="border-t border-gray-200 p-4">
             <div className="flex items-center">
               <div className="flex-shrink-0">
-                <User className="h-8 w-8 text-gray-400" />
+                <User className="h-8 w-8 text-gray-medium" />
               </div>
               <div className="ml-3">
-                <p className="text-sm font-medium text-gray-700">{session?.user?.name}</p>
-                <p className="text-xs text-gray-500">{session?.user?.email}</p>
+                <p className="text-sm font-satoshi font-medium text-dark-primary">{session?.user?.name}</p>
+                <p className="text-xs font-satoshi text-gray-medium">{session?.user?.email}</p>
               </div>
             </div>
             <Button
               variant="ghost"
-              className="mt-3 w-full justify-start text-gray-600 hover:text-gray-900"
+              className="mt-3 w-full justify-start text-gray-medium hover:text-dark-primary font-satoshi font-medium"
               onClick={() => signOut({ callbackUrl: '/' })}
             >
               <LogOut className="mr-2 h-4 w-4" />

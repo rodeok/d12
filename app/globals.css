@@ -1,7 +1,12 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Satoshi:wght@300;400;500;600;700;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* Light/Dark base colors */
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -44,6 +49,7 @@
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
   }
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -76,7 +82,38 @@
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-satoshi;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Typography system */
+  h1 {
+    @apply font-cormorant font-bold text-4xl md:text-5xl lg:text-6xl leading-tight;
+  }
+
+  h2 {
+    @apply font-cormorant font-semibold text-2xl md:text-3xl lg:text-4xl leading-snug;
+  }
+
+  h3 {
+    @apply font-cormorant font-medium text-xl md:text-2xl lg:text-3xl leading-snug;
+  }
+
+  h4 {
+    @apply font-cormorant font-medium text-lg md:text-xl leading-normal;
+  }
+
+  p {
+    @apply font-satoshi font-normal text-base leading-relaxed;
+  }
+
+  .caption {
+    @apply font-satoshi font-light text-sm leading-normal;
+  }
+
+  .ui-label {
+    @apply font-satoshi font-medium text-sm leading-normal;
   }
 }

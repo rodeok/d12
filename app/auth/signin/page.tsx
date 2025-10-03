@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'react-hot-toast';
+import { Home } from 'lucide-react';
 import BannedAccountModal from '@/components/BannedAccountModal';
 
 export default function SignIn() {
@@ -97,7 +98,9 @@ export default function SignIn() {
               </Link>
             </p>
             <p className="text-sm text-gray-600 mt-2">
-         
+              <Link href="/" className="text-green-600 hover:underline center flex items-center justify-center">
+                <Home />
+              </Link>
             </p>
           </div>
         </CardContent>
