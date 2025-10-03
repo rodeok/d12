@@ -9,11 +9,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'react-hot-toast';
+import BannedAccountModal from '@/components/BannedAccountModal';
 
 export default function SignIn() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showBannedModal, setShowBannedModal] = useState(false);
+  const [accountStatus, setAccountStatus] = useState<'banned' | 'deleted'>('banned');
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,7 +31,15 @@ export default function SignIn() {
       });
 
       if (result?.error) {
-        toast.error('Invalid credentials');
+        // Check if it's a banned/deleted account error
+        if (result.error.includes('banned') || result.error.includes('deleted')) {
+          const isBanned = result.error.includes('banned');
+          setAccountStatus(isBanned ? 'banned' : 'deleted');
+          setShowBannedModal(true);
+          toast.error(`Account ${isBanned ? 'banned' : 'deleted'}. You can submit an appeal.`);
+        } else {
+          toast.error('Invalid credentials');
+        }
       } else {
         const session = await getSession();
         if (session) {
@@ -85,9 +96,21 @@ export default function SignIn() {
                 Sign up
               </Link>
             </p>
+            <p className="text-sm text-gray-600 mt-2">
+              <Link href="/admin/login" className="text-green-600 hover:underline">
+                Admin Login
+              </Link>
+            </p>
           </div>
         </CardContent>
       </Card>
+
+      <BannedAccountModal
+        isOpen={showBannedModal}
+        onClose={() => setShowBannedModal(false)}
+        userEmail={email}
+        accountStatus={accountStatus}
+      />
     </div>
   );
 }

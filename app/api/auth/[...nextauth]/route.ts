@@ -21,7 +21,15 @@ const handler = NextAuth({
         
         const user = await User.findOne({ email: credentials.email });
         
-        if (!user || user.isBanned) {
+        if (!user) {
+          throw new Error('deleted');
+        }
+
+        if (user.isBanned) {
+          throw new Error('banned');
+        }
+
+        if (!user.isActive) {
           return null;
         }
 
